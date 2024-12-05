@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Identify Threats</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #007BFF, #00B4DB);
+            color: #fff;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-bottom: 2px solid #fff;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .quiz-container h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .quiz-text {
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .quiz-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .quiz-buttons button {
+            padding: 15px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+            transition: transform 0.2s ease;
+        }
+
+        .quiz-buttons button.green {
+            background: #28a745;
+        }
+
+        .quiz-buttons button.green:hover {
+            transform: scale(1.1);
+        }
+
+        .quiz-buttons button.red {
+            background: #dc3545;
+        }
+
+        .quiz-buttons button.red:hover {
+            transform: scale(1.1);
+        }
+
+        #feedback {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #FF5722;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Quiz: Identify Threats</h1>
+    </header>
+
+    <div class="quiz-container">
+        <h2>Is this a Threat?</h2>
+        <div id="quiz-text" class="quiz-text">
+            A suspicious email claims you’ve won a lottery but asks for your bank details to transfer the prize. The sender’s email address looks unusual.
+        </div>
+        <div class="quiz-buttons">
+            <button class="green" onclick="checkAnswer(false)">Not a Threat</button>
+            <button class="red" onclick="checkAnswer(true)">Threat</button>
+        </div>
+        <div id="feedback"></div>
+    </div>
+
+    <footer>
+        <p>Go back to <a href="index.html">Home</a></p>
+    </footer>
+
+    <script>
+        // Quiz Texts and Answers
+        const quizData = [
+            {
+                text: "A suspicious email claims you’ve won a lottery but asks for your bank details to transfer the prize. The sender’s email address looks unusual.",
+                isThreat: true
+            },
+            {
+                text: "You receive a message from your bank asking you to verify your account by logging into their official app.",
+                isThreat: false
+            },
+            {
+                text: "An unknown person sends you a message with a shortened link, asking you to click it for a surprise gift.",
+                isThreat: true
+            },
+            {
+                text: "Your colleague emails you a meeting invite for tomorrow using your company's official email platform.",
+                isThreat: false
+            }
+        ];
+
+        let currentQuestion = 0;
+
+        function checkAnswer(isThreat) {
+            const feedbackElement = document.getElementById('feedback');
+            if (quizData[currentQuestion].isThreat === isThreat) {
+                feedbackElement.textContent = "Correct! 👍";
+                feedbackElement.style.color = "#28a745"; // Green
+            } else {
+                feedbackElement.textContent = "Wrong! ❌";
+                feedbackElement.style.color = "#dc3545"; // Red
+            }
+
+            // Move to the next question after a short delay
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < quizData.length) {
+                    loadQuestion();
+                } else {
+                    feedbackElement.textContent = "Quiz Completed! 🎉";
+                    document.getElementById('quiz-text').textContent = "Great job! You've finished the quiz.";
+                    document.querySelector('.quiz-buttons').style.display = 'none';
+                }
+            }, 1500);
+        }
+
+        function loadQuestion() {
+            document.getElementById('quiz-text').textContent = quizData[currentQuestion].text;
+            document.getElementById('feedback').textContent = ""; // Clear feedback
+        }
+
+        // Initialize Quiz
+        loadQuestion();
+    </script>
+</body>
+</html>

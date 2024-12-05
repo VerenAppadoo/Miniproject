@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Text Detection Tool</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(to right, #B3E5FC, #81D4FA, #4FC3F7);
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Random Sticker Background */
+        .sticker {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .sticker-1 {
+            top: 10%;
+            left: 15%;
+            background-image: url('/mnt/data/image.png'); /* Replace with your PNG file */
+        }
+
+        .sticker-2 {
+            top: 50%;
+            left: 10%;
+            background-image: url('/mnt/data/image.png'); /* Replace with your PNG file */
+        }
+
+        .sticker-3 {
+            top: 20%;
+            right: 5%;
+            background-image: url('/mnt/data/image.png'); /* Replace with your PNG file */
+        }
+
+        .sticker-4 {
+            bottom: 10%;
+            left: 20%;
+            background-image: url('/mnt/data/image.png'); /* Replace with your PNG file */
+        }
+
+        .sticker-5 {
+            bottom: 20%;
+            right: 15%;
+            background-image: url('/mnt/data/image.png'); /* Replace with your PNG file */
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(179, 229, 252, 0.8);
+            border-bottom: 4px dashed #0288D1;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #0277BD;
+            text-shadow: 2px 2px #03A9F4;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: #01579B;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+            color: #0288D1;
+            text-shadow: 2px 2px #03A9F4;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #01579B;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: #B3E5FC;
+            border: 3px solid #0288D1;
+            border-radius: 15px;
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            color: #0277BD;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            color: #01579B;
+        }
+
+        .cta {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .cta button {
+            background: #0288D1;
+            color: #fff;
+            border: 3px solid #03A9F4;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .cta button:hover {
+            background: #0277BD;
+            transform: scale(1.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: rgba(144, 202, 249, 0.8);
+            border-top: 4px dashed #0288D1;
+            font-size: 1rem;
+            color: #01579B;
+        }
+
+        footer a {
+            color: #0277BD;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .features {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .feature-card {
+                width: 90%;
+            }
+
+            .cta button {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .feature-card {
+                font-size: 0.9rem;
+            }
+
+            .cta button {
+                font-size: 0.9rem;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body class="kids">
+    <!-- Random Sticker Background -->
+    <div class="sticker sticker-1"></div>
+    <div class="sticker sticker-2"></div>
+    <div class="sticker sticker-3"></div>
+    <div class="sticker sticker-4"></div>
+    <div class="sticker sticker-5"></div>
+
+    <header>
+        <h1>Welcome to BlueLand!</h1>
+        <p>Your playful AI text companion!</p>
+    </header>
+
+    <div class="container">
+        <section class="hero">
+            <h2>Discover and Learn!</h2>
+            <p>Explore the world of AI with colorful tools, games, and quizzes!</p>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <h3>Interactive Tools</h3>
+                <p>Play and learn with fun quizzes and AI tools!</p>
+            </div>
+            <div class="feature-card">
+                <h3>Colorful AI Fun</h3>
+                <p>Enjoy exciting games while learning about AI!</p>
+            </div>
+        </section>
+
+        <section class="cta">
+            <button onclick="window.location.href='detection.html'">Start Your Adventure</button>
+        </section>
+    </div>
+
+    <footer>
+        <p>Created with love! <a href="#">Contact Us</a></p>
+    </footer>
+</body>
+</html>

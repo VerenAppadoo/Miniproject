@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scam Edu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .output {
+      margin-top: 20px;
+    }
+    select, input, button {
+      margin: 10px 0;
+      padding: 5px;
+      font-size: 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .product-status {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Scam Edu</h1>
+  <p>Select a product and specify a date range to filter orders:</p>
+ 
+  <label for="products">Select Product:</label>
+  <select id="products">
+    <option value="">-- Select a Product --</option>
+  </select>
+ 
+  <label for="startDate">Start Date:</label>
+  <input type="date" id="startDate">
+ 
+  <label for="endDate">End Date:</label>
+  <input type="date" id="endDate">
+ 
+  <button id="filterButton">Filter Orders</button>
+ 
+  <button id="quizButton">Take Quiz</button>
+  <div id="output" class="output"></div>
+  <span class="quizQuestions" id="quizQuestions"></span>
+
+  <script>
+    async function fetchData() {
+        // Use CORS proxy to bypass CORS restrictions
+        const corsProxy = "https://cors-anywhere.herokuapp.com/";
+        const productsEndpoint = `${corsProxy}https://keshav-public.s3.us-west-1.amazonaws.com/hackathon-json/product.json`;
+        const ordersEndpoint = `${corsProxy}https://keshav-public.s3.us-west-1.amazonaws.com/hackathon-json/order.json`;
+   
+        try {
+          // Fetch products and populate the dropdown
+          const productsResponse = await fetch(productsEndpoint);
+          const products = await productsResponse.json();
+   
+          const productsDropdown = document.getElementById("products");
+          products.forEach(product => {
+            const option = document.createElement("option");
+            option.value = product.product;
+            option.textContent = `${product.product} (Price: $${product.price})`;
+            productsDropdown.appendChild(option);
+            
+            // Create a span with radio buttons for each product
+            const productStatusDiv = document.createElement("div");
+            productStatusDiv.classList.add("product-status");
+            productStatusDiv.innerHTML = `
+              <p><strong>${product.product}</strong></p>
+              <label>
+                <input type="radio" name="status-${product.product}" value="true"> Fake
+              </label>
+              <label>
+                <input type="radio" name="status-${product.product}" value="false"> Not Fake
+              </label>
+            `;
+            document.body.appendChild(productStatusDiv);
+          });
+   
+          // Fetch orders
+          const ordersResponse = await fetch(ordersEndpoint);
+          const orders = await ordersResponse.json();
+   
+          // Add event listener to the filter button
+          document.getElementById("filterButton").addEventListener("click", () => {
+            const selectedProduct = productsDropdown.value;
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
+   
+            if (!selectedProduct || !startDate || !endDate) {
+              document.getElementById("output").innerHTML = `<p style="color: red;">Please select a product and enter a valid date range.</p>`;
+              return;
+            }
+   
+            // Filter orders
+            const filteredOrders = orders.filter(order =>
+              order.product === selectedProduct &&
+              order.startDate >= startDate &&
+              order.endDate <= endDate
+            );
+   
+            // Calculate total quantity and total price
+            const totalQuantity = filteredOrders.reduce((sum, order) => sum + order.quantity, 0);
+            const productPrice = products.find(product => product.product === selectedProduct)?.price || 0;
+            const totalPrice = totalQuantity * productPrice;
+   
+            // Display results in a table
+            const outputDiv = document.getElementById("output");
+            if (filteredOrders.length > 0) {
+              let tableHtml = `
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Question</th>
+                      <th>Fake</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+              `;
+              filteredOrders.forEach(order => {
+                tableHtml += `
+                  <tr>
+                    <td>${order.orderId}</td>
+                    <td>${order.product}</td>
+                  </tr>
+                `;
+              });
+              tableHtml += `
+                  </tbody>
+                </table>
+                <p><strong>Total Quantity:</strong> ${totalQuantity}</p>
+                <p><strong>Total Price:</strong> $${totalPrice.toFixed(2)}</p>
+              `;
+              outputDiv.innerHTML = tableHtml;
+            } else {
+              outputDiv.innerHTML = `<p>No orders found for the selected product and date range.</p>`;
+            }
+          });
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          document.getElementById("output").innerHTML = `<p style="color: red;">An error occurred while fetching data.</p>`;
+        }
+      }
+   
+      // Initialize the page by fetching data
+      fetchData();
+  </script>
+</body>
+</html>
